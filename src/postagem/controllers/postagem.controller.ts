@@ -1,27 +1,33 @@
 import {
   Controller,
   Get,
-  // Post,
-  // Body,
-  // Patch,
-  // Param,
-  // Delete,
+  Post,
+  Body,
+  Param,
+  Delete,
   HttpCode,
   HttpStatus,
+  ParseIntPipe,
+  Put,
 } from '@nestjs/common';
 import { PostagemService } from '../services/postagem.service';
-// import { CreatePostagemDto } from '../dto/create-postagem.dto';
-// import { UpdatePostagemDto } from '../dto/update-postagem.dto';
 import { Postagem } from '../entities/postagem.entity';
 
 @Controller('postagens')
 export class PostagemController {
   constructor(private readonly postagemService: PostagemService) {}
 
-  // @Post()
-  // create(@Body() createPostagemDto: CreatePostagemDto) {
-  //   // return this.postagemService.create(createPostagemDto);
-  // }
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  create(@Body() postagem: Postagem) {
+    return this.postagemService.create(postagem);
+  }
+
+  @Put()
+  @HttpCode(HttpStatus.OK)
+  update(@Body() postagem: Postagem) {
+    return this.postagemService.update(postagem);
+  }
 
   @Get()
   @HttpCode(HttpStatus.OK)
@@ -29,21 +35,21 @@ export class PostagemController {
     return this.postagemService.findAll();
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   // return this.postagemService.findOne(+id);
-  // }
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  findById(@Param('id', ParseIntPipe) id: number) {
+    return this.postagemService.findById(id);
+  }
 
-  // @Patch(':id')
-  // update(
-  //   @Param('id') id: string,
-  //   @Body() updatePostagemDto: UpdatePostagemDto,
-  // ) {
-  //   // return this.postagemService.update(+id, updatePostagemDto);
-  // }
+  @Get('/titulo/:titulo')
+  @HttpCode(HttpStatus.OK)
+  findAllByTitulo(@Param('titulo') titulo: string) {
+    return this.postagemService.findAllByTitulo(titulo);
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   // return this.postagemService.remove(+id);
-  // }
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.postagemService.delete(id);
+  }
 }

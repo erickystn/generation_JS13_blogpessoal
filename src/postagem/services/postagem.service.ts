@@ -1,9 +1,13 @@
-import { Injectable } from '@nestjs/common';
-// import { CreatePostagemDto } from './dto/create-postagem.dto';
-// import { UpdatePostagemDto } from './dto/update-postagem.dto';
+import { Postagem } from './../entities/postagem.entity';
+import {
+  HttpCode,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Postagem } from '../entities/postagem.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
+import { DeleteResult } from 'typeorm/browser';
 
 @Injectable()
 export class PostagemService {
@@ -11,27 +15,39 @@ export class PostagemService {
     @InjectRepository(Postagem)
     private postagemRepository: Repository<Postagem>,
   ) {}
+
   async findAll(): Promise<Postagem[]> {
-    console.log('Chegou');
     return this.postagemRepository.find();
   }
-  // create(createPostagemDto: CreatePostagemDto) {
-  //   return 'This action adds a new postagem';
-  // }
 
-  // findAll() {
-  //   return `This action returns all postagem`;
-  // }
+  async findById(id: number): Promise<Postagem> {
+    const postagem = await this.postagemRepository.findOneBy({ id });
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} postagem`;
-  // }
+    if (!postagem) {
+      throw new HttpException('Postagem não encontrada', HttpStatus.NOT_FOUND);
+    }
+    return postagem;
+  }
 
-  // update(id: number, updatePostagemDto: UpdatePostagemDto) {
-  //   return `This action updates a #${id} postagem`;
-  // }
+  async findAllByTitulo(titulo: string): Promise<Postagem[]> {
+    return await this.postagemRepository.findBy({
+      titulo: ILike(`%${titulo}%`),
+    });
+  }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} postagem`;
-  // }
+  async create(postagem: Postagem): Promise<Postagem> {
+    return await this.postagemRepository.save(postagem);
+  }
+
+  async update(postagem: Postagem): Promise<Postagem> {
+    if (!postagem.id || postagem.id <= 0)
+      throw new HttpException('ID inválido!', HttpStatus.BAD_GATEWAY);
+    await this.findById(postagem.id);
+    return await this.postagemRepository.save(postagem);
+  }
+
+  async delete(id: number): Promise<DeleteResult> {
+    await this.findById(id);
+    return await this.postagemRepository.delete({ id });
+  }
 }

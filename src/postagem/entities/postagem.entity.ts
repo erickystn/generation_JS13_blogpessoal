@@ -1,5 +1,5 @@
 import { Transform, TransformFnParams } from 'class-transformer';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 import {
   Column,
   Entity,
@@ -9,6 +9,8 @@ import {
 
 @Entity({ name: 'tb_postagens' })
 export class Postagem {
+  @IsNumber() // <--- ADICIONE ISSO
+  @IsOptional()
   @PrimaryGeneratedColumn()
   id: number;
 
