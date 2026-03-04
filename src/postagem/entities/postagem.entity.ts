@@ -1,15 +1,17 @@
-import { Transform, TransformFnParams } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { Transform, TransformFnParams, Type } from 'class-transformer';
+import { IsInt, IsNotEmpty, IsObject, IsOptional } from 'class-validator';
 import {
   Column,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Tema } from '../../tema/entities/tema.entity';
 
 @Entity({ name: 'tb_postagens' })
 export class Postagem {
-  @IsNumber() // <--- ADICIONE ISSO
+  @IsInt()
   @IsOptional()
   @PrimaryGeneratedColumn()
   id: number;
@@ -26,4 +28,10 @@ export class Postagem {
 
   @UpdateDateColumn()
   data: Date;
+
+  @ManyToOne(() => Tema, (tema) => tema.postagens, { onDelete: 'CASCADE' })
+  @IsObject()
+  @IsNotEmpty()
+  @Type(() => Tema)
+  tema: Tema;
 }
