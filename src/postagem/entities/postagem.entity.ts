@@ -1,5 +1,9 @@
 import { Transform, TransformFnParams, Type } from 'class-transformer';
+<<<<<<< HEAD
 import { IsInt, IsNotEmpty, IsObject, IsOptional, Length } from 'class-validator';
+=======
+import { IsInt, IsNotEmpty, IsObject, IsOptional } from 'class-validator';
+>>>>>>> a6c19835c5e829e44f318660da91af733e7b32f4
 import {
   Column,
   Entity,
