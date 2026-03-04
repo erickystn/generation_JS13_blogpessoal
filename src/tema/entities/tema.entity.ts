@@ -1,7 +1,5 @@
 import { Transform } from 'class-transformer';
-
 import { IsInt, IsNotEmpty, IsOptional, Length } from 'class-validator';
-
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Postagem } from '../../postagem/entities/postagem.entity';
 
