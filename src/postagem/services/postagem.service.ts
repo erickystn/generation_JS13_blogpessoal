@@ -14,13 +14,18 @@ export class PostagemService {
   ) {}
 
   async findAll(): Promise<Postagem[]> {
-    return this.postagemRepository.find({ relations: { tema: true } });
+    // return this.postagemRepository.find({ relations: { tema: true,usuario:true } });
+    return this.postagemRepository.createQueryBuilder("postagem")
+    .leftJoinAndSelect("postagem.tema", "tema")
+    .leftJoin("postagem.usuario", "usuario")
+    .addSelect(["usuario.id", "usuario.nome"]) // Seleciona apenas id e nome do usuario
+    .getMany();
   }
 
   async findById(id: number): Promise<Postagem> {
     const postagem = await this.postagemRepository.findOne({
       where: { id },
-      relations: { tema: true },
+      relations: { tema: true ,usuario:true},
     });
 
     if (!postagem) {
@@ -34,7 +39,7 @@ export class PostagemService {
       where: {
         titulo: ILike(`%${titulo}%`),
       },
-      relations: { tema: true },
+      relations: { tema: true,usuario:true },
     });
   }
 
