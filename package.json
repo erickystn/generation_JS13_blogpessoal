@@ -24,7 +24,6 @@
     "@nestjs/core": "^11.1.16",
     "@nestjs/jwt": "^11.0.2",
     "@nestjs/mapped-types": "2.1.0",
-    "@nestjs/mapped-types": "2.1.0",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.1.16",
     "@nestjs/typeorm": "^11.0.0",
