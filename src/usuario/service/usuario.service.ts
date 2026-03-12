@@ -12,7 +12,7 @@ export class UsuarioService {
   ) {}
 
   async findAll() {
-    return await this.usuarioRepository.find();
+    return await this.usuarioRepository.find({relations:{postagem:true}});
   }
 
   async findByUsuario(usuario: string): Promise<Usuario | null> {
