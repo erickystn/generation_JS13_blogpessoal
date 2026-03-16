@@ -7,19 +7,26 @@ import { Tema } from './tema/entities/tema.entity';
 import { AuthModule } from './auth/auth.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { Usuario } from './usuario/entities/usuario.entity';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'root',
-      database: 'db_blogpessoal',
-      entities: [Postagem, Tema,Usuario],
+      type: 'postgres',
+      url: process.env.DATABASE_URL,
+      ssl: true,
+      entities: [Postagem, Tema, Usuario],
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: false,
+      extra: {
+        ssl: {
+          rejectUnauthorized: false,
+        },
+        // Configurações otimizadas para Neon
+        max: 1,
+        connectionTimeoutMillis: 0,
+        idleTimeoutMillis: 30000,
+      },
       // logging: true,
     }),
     PostagemModule,
@@ -27,7 +34,7 @@ import { Usuario } from './usuario/entities/usuario.entity';
     AuthModule,
     UsuarioModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [],
 })
 export class AppModule {}

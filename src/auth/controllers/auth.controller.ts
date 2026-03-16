@@ -9,7 +9,9 @@ import {
 import { AuthService } from '../services/auth.service';
 import { UsuarioLogin } from '../entities/usuariologin';
 import { LocalAuthGuard } from '../guard/local-auth.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Usuario')
 @Controller('/usuarios')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -18,7 +20,6 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('/logar')
   login(@Body() usuario: UsuarioLogin): Promise<any> {
-    console.log(usuario)
     return this.authService.login(usuario);
   }
 }

@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Param, Put, ParseIntPipe, HttpCode, HttpSt
 import { UsuarioService } from '../service/usuario.service';
 import { Usuario } from '../entities/usuario.entity';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-
+@ApiTags('Usuario')
+@ApiBearerAuth()
 @Controller('usuarios')
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService) {}
@@ -11,7 +13,6 @@ export class UsuarioController {
   @Post('/cadastrar')
   @HttpCode(HttpStatus.CREATED)
   create(@Body() usuario: Usuario) {
-    console.log(usuario)
     return this.usuarioService.create(usuario);
   }
 

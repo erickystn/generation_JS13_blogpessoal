@@ -41,8 +41,9 @@ export class UsuarioService {
     if (buscaUsuario)
       throw new HttpException('O Usuario já existe!', HttpStatus.BAD_REQUEST);
 
-    usuario.senha = await this.bcrypt.criptografarSenha(usuario.senha);
-    return await this.usuarioRepository.save(usuario);
+    const {id, ...usuarioSemId} = usuario;
+    usuarioSemId.senha = await this.bcrypt.criptografarSenha(usuario.senha);
+    return await this.usuarioRepository.save(usuarioSemId);
   }
 
   async update(usuario: Usuario) {
